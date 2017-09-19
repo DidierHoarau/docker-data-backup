@@ -1,0 +1,11 @@
+FROM ubuntu
+
+COPY docker-files/ssh-storage/ /root/.ssh
+RUN apt update && \
+    apt install -y openssh-server && \
+    rm -rf /var/lib/apt/lists/* && \
+    chmod -R o-rwx /root/.ssh && \
+    chmod -R g-rwx /root/.ssh && \
+    mkdir -p /var/run/sshd
+
+CMD ["/usr/sbin/sshd", "-D"]

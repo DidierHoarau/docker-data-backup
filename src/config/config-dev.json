@@ -1,0 +1,18 @@
+{
+  "folders": {
+    "tmp": "/opt/data/tmp"
+  },
+  "labels": {
+    "name": "docker-backup.name",
+    "maxAge": "docker-backup.max-age",
+    "command": "docker-backup.command",
+    "file": "docker-backup.file"
+  },
+  "storage": {
+    "host": "docker-data-backup-storage",
+    "user": "root",
+    "port": "22",
+    "folder": "/opt/backups"
+  },
+  "checkInterval": 15000
+}

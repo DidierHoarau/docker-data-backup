@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile-backup-dev
+    image: ${DOCKER_REGISTRY}/docker-data-backup_app
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - ${PROJECT_DIR}/src:/opt/app/src
+      - ${PROJECT_DIR}/tmp/output-backup:/opt/data
+    hostname: docker-data-backup
+    networks:
+      - docker-data-backup-network
+
+  storage:
+    build:
+      context: .
+      dockerfile: Dockerfile-storage
+    image: ${DOCKER_REGISTRY}/docker-data-backup_storage
+    volumes:
+      - ${PROJECT_DIR}/tmp/output-storage:/opt/backups
+    networks:
+      docker-data-backup-network:
+        aliases:
+          - docker-data-backup-storage
+
+  test:
+    image: ubuntu
+    command: ["tail", "-f", "/dev/null"]
+    labels:
+      - "docker-backup.name=test"
+      - "docker-backup.max-age=60000"
+      - "docker-backup.command=ps -ef"
+    deploy:
+      mode: global
+
+  test2:
+    image: ubuntu
+    command: ["tail", "-f", "/dev/null"]
+    labels:
+      - "docker-backup.name=test2"
+      - "docker-backup.max-age=60000"
+      - "docker-backup.command=ps -ef"
+      - "docker-backup.file=/etc/hosts"
+    deploy:
+      mode: global
+
+networks:
+  docker-data-backup-network:
+    external: true

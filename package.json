@@ -1,0 +1,35 @@
+{
+  "name": "docker-data-backup",
+  "version": "1.0.0",
+  "description": "Automatic backup for Docker Containers",
+  "scripts": {
+    "//": "-- Packaging ------------------------------------------------------",
+    "packaging:prepare": "docker-packaging/prepare.sh",
+    "packaging:image-build": "docker-packaging/image-build.sh",
+    "packaging:image-push": "docker-packaging/image-push.sh",
+    "packaging:service-deploy": "docker-packaging/service-deploy.sh",
+    "packaging:service-run": "docker-packaging/service-run.sh",
+    "///": "-- Dev -----------------------------------------------------------",
+    "lint": "eslint src",
+    "run:dev": "./docker-packaging-config/docker-dev.sh",
+    "watch:dev": "NODE_ENV=dev nodemon --watch src src/app.js"
+  },
+  "author": "Didier Hoarau",
+  "license": "MIT",
+  "dependencies": {
+    "dateformat": "^2.0.0",
+    "dockerode": "^2.5.1",
+    "eslint": "^4.7.1",
+    "fs-extra": "^4.0.1",
+    "lodash": "^4.17.4",
+    "request": "^2.81.0",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "mocha": "^3.5.0",
+    "nodemon": "^1.11.0",
+    "npm-watch": "^0.2.0",
+    "sinon": "^2.4.1"
+  }
+}

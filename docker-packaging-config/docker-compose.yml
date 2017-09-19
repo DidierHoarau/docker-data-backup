@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile-backup
+    image: ${DOCKER_REGISTRY}/docker-data-backup_app
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+    hostname: docker-data-backup
+    networks:
+      - docker-data-backup-network
+    deploy:
+      mode: global
+
+  storage:
+    build:
+      context: .
+      dockerfile: Dockerfile-storage
+    image: ${DOCKER_REGISTRY}/docker-data-backup_storage
+    volumes:
+      - /opt/data/docker-data-backup:/opt/backups
+    networks:
+      docker-data-backup-network:
+        aliases:
+          - docker-data-backup-storage
+
+networks:
+  docker-data-backup-network:
+    external: true
