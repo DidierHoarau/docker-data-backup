@@ -46,14 +46,16 @@ function backupContainer(container, backupConfig) {
       return fse.ensureDir(`${folderPath}/files`);
     })
     .then(() => {
+      return commands.execute(
+        `cd ${folderPath}/command && docker exec ${container.Id} ${backupConfig.command} > ./output`
+      );
+    })
+    .then(() => {
       if (backupConfig.file) {
         return commands.execute(`cd ${folderPath}/files && docker cp ${container.Id}:${backupConfig.file} .`);
       } else {
         return Promise.resolve();
       }
-    })
-    .then(() => {
-      return commands.execute(`cd ${folderPath}/command && ${backupConfig.command} > ./output`);
     })
     .then(() => {
       return commands.execute(`cd ${config.folders.tmp} && tar czf ${folderName}.tar.gz ${folderName}`);
